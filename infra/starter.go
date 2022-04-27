@@ -47,25 +47,16 @@ func Register(s IStarter) {
 	StarterRegister.Register(s)
 }
 
-type BaseStarter struct {
-}
+type BaseStarter struct{}
 
-func (b *BaseStarter) Init(ctx StarterContext) {
+func (b *BaseStarter) Init(ctx StarterContext) {}
 
-}
+func (b *BaseStarter) Setup(ctx StarterContext) {}
 
-func (b *BaseStarter) Setup(ctx StarterContext) {
-
-}
-
-func (b *BaseStarter) Start(ctx StarterContext) {
-
-}
+func (b *BaseStarter) Start(ctx StarterContext) {}
 
 func (b *BaseStarter) StartBlocking() bool {
 	return false
 }
 
-func (b *BaseStarter) Stop(ctx StarterContext) {
-
-}
+func (b *BaseStarter) Stop(ctx StarterContext) {}
