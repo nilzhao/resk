@@ -26,8 +26,6 @@ func (s *DbxDatabaseStarter) Setup(ctx infra.StarterContext) {
 	if err != nil {
 		panic(err)
 	}
-	logrus.Infof("%+v\n", settings)
-	logrus.Info("mysql.conn url:", settings.ShortDataSourceName())
 	dbx, err := dbx.Open(settings)
 	if err != nil {
 		panic(err)
