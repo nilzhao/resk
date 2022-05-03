@@ -2,11 +2,8 @@ package account
 
 import (
 	"errors"
-	"fmt"
 	"resk/infra/base"
 	"resk/services"
-
-	"encoding/json"
 
 	"github.com/segmentio/ksuid"
 	"github.com/shopspring/decimal"
@@ -45,7 +42,6 @@ func (domain *accountDomain) createAccountLog() {
 	domain.accountLog.TargetAccountNo = domain.account.UserId
 	domain.accountLog.TargetUserId = domain.account.UserId
 	domain.accountLog.TargetUsername = domain.account.Username.String
-	fmt.Println("domain.accountLog.ChangeType", domain.accountLog.ChangeType)
 	if domain.accountLog.ChangeType == services.AccountCreated {
 		// 交易金额
 		domain.accountLog.Amount = domain.account.Balance
@@ -107,15 +103,13 @@ func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status s
 	// 创建账户流水记录
 	domain.accountLog = AccountLog{}
 	domain.accountLog.FromTransferDTO(&dto)
-	log, _ := json.Marshal(domain.accountLog)
-	fmt.Println(string(log))
 	domain.createAccountLog()
 	// 检查余额是否足够和更新余额:通过乐观锁来验证,更新余额的同时验证余额是否足够你
 	// 写入流水记录
 	err = base.Tx(func(runner *dbx.TxRunner) error {
 		accountDao := AccountDao{runner: runner}
 		accountLogDao := AccountLogDao{runner: runner}
-		rows, err := accountDao.UpdateBalance(domain.account.AccountNo, amount)
+		rows, err := accountDao.UpdateBalance(dto.TradeBody.AccountNo, amount)
 		if err != nil {
 			status = services.TransferStatusFailure
 			return err
@@ -124,7 +118,7 @@ func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status s
 			status = services.TransferStatusInsufficient
 			return errors.New("余额不足")
 		}
-		a := accountDao.GetOne(domain.account.AccountNo)
+		a := accountDao.GetOne(dto.TradeBody.AccountNo)
 		if a == nil {
 			return errors.New("账户不存在")
 		}

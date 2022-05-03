@@ -11,22 +11,23 @@ type IAccountService interface {
 	// CreateAccount 创建账户
 	CreateAccount(dto AccountCreatedDTO) (*AccountDTO, error)
 	// Transfer 转账
-	Transfer(dto AccountTransferDTO) (*AccountDTO, error)
+	Transfer(dto AccountTransferDTO) (TransferStatus, error)
 	// StoreValue 存钱
-	StoreValue(dto AccountTransferDTO) (*AccountDTO, error)
+	StoreValue(dto AccountTransferDTO) (TransferStatus, error)
 	// GetEnvelopeAccountByUserId 通过userId获取红包账户
-	GetEnvelopeAccountByUserId(userId string) (*AccountDTO, error)
+	GetAccountByUserId(userId string) (*AccountDTO, error)
+	// 通过账户号获取账户信息
+	GetAccount(accontNo string) (*AccountDTO, error)
 }
 
 // AccountCreatedDTO 创建用户的参数
 type AccountCreatedDTO struct {
-	UserId       string
-	Username     string
-	AccountName  string
+	UserId       string `validate:"required"`
+	Username     string `validate:"required"`
+	AccountName  string `validate:"required"`
 	AccountType  int8
 	CurrencyCode string
-	Balance      decimal.Decimal
-	Status       int8
+	Amount       string `validate:"numeric"`
 }
 
 // AccountDTO 账户本身结构
@@ -52,15 +53,14 @@ type TradeParticipator struct {
 
 // AccountTransferDTO 转账参数
 type AccountTransferDTO struct {
-	TradeNo string
-	// 交易主体
-	TradeBody TradeParticipator
-	// 交易目标
-	TradeTarget TradeParticipator
-	Amount      decimal.Decimal
-	ChangeType  ChangeType
-	ChangeFlag  ChangeFlag
-	Decs        string
+	TradeNo     string            `validate:"required"`
+	TradeBody   TradeParticipator `validate:"required"`         // 交易主体
+	TradeTarget TradeParticipator `validate:"required"`         // 交易目标
+	AmountStr   string            `validate:"required,numeric"` //交易金额,该交易涉及的金额
+	Amount      decimal.Decimal   ``
+	ChangeType  ChangeType        `validate:"required,numeric"`
+	ChangeFlag  ChangeFlag        `validate:"required,numeric"`
+	Decs        string            ``
 }
 
 // 账户流水

@@ -21,10 +21,10 @@ func TestAccountDomain_Create(t *testing.T) {
 		retDto, err := domain.Create(dto)
 		So(err, ShouldBeNil)
 		So(retDto, ShouldNotBeNil)
-		So(dto.UserId, ShouldEqual, dto.UserId)
-		So(dto.Username, ShouldEqual, dto.Username)
-		So(dto.Status, ShouldEqual, dto.Status)
-		So(dto.Balance.String(), ShouldEqual, dto.Balance.String())
+		So(retDto.UserId, ShouldEqual, dto.UserId)
+		So(retDto.Username, ShouldEqual, dto.Username)
+		So(retDto.Status, ShouldEqual, dto.Status)
+		So(retDto.Balance.String(), ShouldEqual, dto.Balance.String())
 	})
 }
 

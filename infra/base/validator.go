@@ -26,7 +26,7 @@ type ValidatorStarter struct {
 }
 
 func (v *ValidatorStarter) Init(ctx infra.StarterContext) {
-	validate = new(validator.Validate)
+	validate = validator.New()
 	cn := zh.New()
 	uni := ut.New(cn, cn)
 	trans, found := uni.GetTranslator("zh")
