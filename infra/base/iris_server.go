@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/middleware/logger"
+	irisLogger "github.com/kataras/iris/v12/middleware/logger"
 	irisRecover "github.com/kataras/iris/v12/middleware/recover"
 	"github.com/sirupsen/logrus"
 )
@@ -34,7 +34,10 @@ func (s *IrisServerStarter) Start(ctx infra.StarterContext) {
 		logrus.Info(route.Method + route.Path)
 	}
 	port := ctx.Props().GetDefault("app.server.port", "18080")
-	Iris().Listen(":" + port)
+	err := Iris().Listen(":" + port)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *IrisServerStarter) StartBlocking() bool {
@@ -44,7 +47,7 @@ func (s *IrisServerStarter) StartBlocking() bool {
 func initIris() *iris.Application {
 	app := iris.New()
 	app.UseRouter(irisRecover.New())
-	conf := logger.Config{
+	conf := irisLogger.Config{
 		Status:     true,
 		IP:         true,
 		Method:     true,
@@ -55,6 +58,6 @@ func initIris() *iris.Application {
 			app.Logger().Infof("| %s | %s | %s | %s | %s | %s | %s | %s |", endTime.Format("2006-01-02 15:04:05"), latency.String(), status, ip, method, path, message, headerMessage)
 		},
 	}
-	app.Use(logger.New(conf))
+	app.Use(irisLogger.New(conf))
 	return app
 }

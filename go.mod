@@ -9,6 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/kataras/iris/v12 v12.2.0-beta1.0.20220423202625-3b95c85d3db6
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/segmentio/ksuid v1.0.2
 	github.com/tietang/props v2.2.0+incompatible
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 )
@@ -26,11 +27,13 @@ require (
 	github.com/goccy/go-json v0.9.7-0.20220412154129-171d97575378 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gopherjs/gopherjs v0.0.0-20220410123724-9e86199038b0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/iris-contrib/jade v1.1.4 // indirect
 	github.com/iris-contrib/schema v0.0.6 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/kataras/blocks v0.0.5 // indirect
 	github.com/kataras/golog v0.1.7 // indirect
 	github.com/kataras/pio v0.0.10 // indirect
@@ -50,6 +53,7 @@ require (
 	github.com/onsi/gomega v1.19.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/schollz/closestmatch v2.1.0+incompatible // indirect
+	github.com/smartystreets/assertions v1.2.1 // indirect
 	github.com/tdewolff/minify/v2 v2.11.1 // indirect
 	github.com/tdewolff/parse/v2 v2.5.28 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
@@ -68,8 +72,9 @@ require (
 
 require (
 	github.com/go-ini/ini v1.66.4 // indirect
+	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.8.1
-	github.com/smartystreets/goconvey v1.7.2 // indirect
+	github.com/smartystreets/goconvey v1.7.2
 	github.com/tietang/dbx v1.0.1
 	github.com/tietang/go-utils v0.1.3 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

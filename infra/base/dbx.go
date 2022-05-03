@@ -30,6 +30,6 @@ func (s *DbxDatabaseStarter) Setup(ctx infra.StarterContext) {
 	if err != nil {
 		panic(err)
 	}
-	logrus.Info(dbx.Ping())
+	logrus.Info("数据库链接状态：", dbx.Ping())
 	database = dbx
 }
