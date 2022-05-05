@@ -2,6 +2,7 @@ package main
 
 import (
 	"resk/infra"
+	"resk/infra/base"
 
 	_ "resk"
 
@@ -12,6 +13,7 @@ import (
 func main() {
 	file := kvs.GetCurrentFilePath("config.ini", 1)
 	conf := ini.NewIniFileCompositeConfigSource(file)
+	base.InitLog()
 	app := infra.New(conf)
 	app.Start()
 }

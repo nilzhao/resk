@@ -8,7 +8,7 @@ import (
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
-func init() {
+func InitLog() {
 	// 定义日志格式
 	formatter := &prefixed.TextFormatter{
 		ForceColors:     true, // 控制台高亮

@@ -4,11 +4,21 @@ import (
 	"errors"
 	"resk/infra/base"
 	"resk/services"
+	"sync"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
 )
+
+var _ services.AccountService = new(accountService)
+var once sync.Once
+
+func init() {
+	once.Do(func() {
+		services.IAccountService = new(accountService)
+	})
+}
 
 type accountService struct{}
 

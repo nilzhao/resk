@@ -4,7 +4,12 @@
 
 package infra
 
-import "github.com/tietang/props/kvs"
+import (
+	"reflect"
+
+	"github.com/sirupsen/logrus"
+	"github.com/tietang/props/kvs"
+)
 
 type BootApplication struct {
 	conf           kvs.ConfigSource
@@ -42,7 +47,10 @@ func (b *BootApplication) setup() {
 }
 
 func (b *BootApplication) start() {
+	logrus.Info("Starting starters...")
 	for index, starter := range StarterRegister.AllStarters() {
+		typ := reflect.TypeOf(starter)
+		logrus.Debug("Starting: ", typ.String())
 		if starter.StartBlocking() {
 			// 如果是最后一个 starter，是可以阻塞的，直接启动并阻塞
 			if index+1 == len(StarterRegister.AllStarters()) {

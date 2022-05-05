@@ -1,13 +1,22 @@
 package services
 
 import (
+	"resk/infra/base"
 	"time"
 
 	"github.com/shopspring/decimal"
 )
 
+var IAccountService AccountService
+
+// 用于对外暴露账户应用服务,唯一的暴露点
+func GetAccountService() AccountService {
+	base.Check(IAccountService)
+	return IAccountService
+}
+
 // IAccountService 账户操作
-type IAccountService interface {
+type AccountService interface {
 	// CreateAccount 创建账户
 	CreateAccount(dto AccountCreatedDTO) (*AccountDTO, error)
 	// Transfer 转账
@@ -15,9 +24,9 @@ type IAccountService interface {
 	// StoreValue 存钱
 	StoreValue(dto AccountTransferDTO) (TransferStatus, error)
 	// GetEnvelopeAccountByUserId 通过userId获取红包账户
-	GetAccountByUserId(userId string) (*AccountDTO, error)
+	GetAccountByUserId(userId string) *AccountDTO
 	// 通过账户号获取账户信息
-	GetAccount(accontNo string) (*AccountDTO, error)
+	GetAccount(accontNo string) *AccountDTO
 }
 
 // AccountCreatedDTO 创建用户的参数
@@ -32,16 +41,16 @@ type AccountCreatedDTO struct {
 
 // AccountDTO 账户本身结构
 type AccountDTO struct {
-	AccountNo    string          //账户编号,账户唯一标识
-	AccountName  string          //账户名称,用来说明账户的简短描述,账户对应的名称或者命名，比如xxx积分、xxx零钱
-	AccountType  int8            //账户类型，用来区分不同类型的账户：积分账户、会员卡账户、钱包账户、红包账户
-	CurrencyCode string          //货币类型编码：CNY人民币，EUR欧元，USD美元 。。。
-	UserId       string          //用户编号, 账户所属用户
-	Username     string          //用户名称
-	Balance      decimal.Decimal //账户可用余额
-	Status       int8            //账户状态，账户状态：0账户初始化，1启用，2停用
-	CreatedAt    time.Time       //创建时间
-	UpdatedAt    time.Time       //更新时间
+	AccountNo    string          `json:"accountNo"`    //账户编号,账户唯一标识
+	AccountName  string          `json:"accountName"`  //账户名称,用来说明账户的简短描述,账户对应的名称或者命名，比如xxx积分、xxx零钱
+	AccountType  int8            `json:"accountType"`  //账户类型，用来区分不同类型的账户：积分账户、会员卡账户、钱包账户、红包账户
+	CurrencyCode string          `json:"currencyCode"` //货币类型编码：CNY人民币，EUR欧元，USD美元 。。。
+	UserId       string          `json:"userId"`       //用户编号, 账户所属用户
+	Username     string          `json:"username"`     //用户名称
+	Balance      decimal.Decimal `json:"balance"`      //账户可用余额
+	Status       int8            `json:"status"`       //账户状态，账户状态：0账户初始化，1启用，2停用
+	CreatedAt    time.Time       `json:"createdAt"`    //创建时间
+	UpdatedAt    time.Time       `json:"updatedAt"`    //更新时间
 }
 
 // TradeParticipator 账户教育参与者信息
