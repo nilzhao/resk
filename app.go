@@ -3,6 +3,7 @@ package resk
 import (
 	_ "resk/apis/web"
 	_ "resk/core/account"
+	_ "resk/core/envelope"
 	"resk/infra"
 	"resk/infra/base"
 )

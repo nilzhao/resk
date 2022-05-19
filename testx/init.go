@@ -1,10 +1,11 @@
 package testx
 
 import (
-	"github.com/tietang/props/ini"
-	"github.com/tietang/props/kvs"
 	"resk/infra"
 	"resk/infra/base"
+
+	"github.com/tietang/props/ini"
+	"github.com/tietang/props/kvs"
 )
 
 func init() {
