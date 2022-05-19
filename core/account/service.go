@@ -6,9 +6,7 @@ import (
 	"resk/services"
 	"sync"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/shopspring/decimal"
-	"github.com/sirupsen/logrus"
 )
 
 var _ services.AccountService = new(accountService)
@@ -25,18 +23,8 @@ type accountService struct{}
 // CreateAccount 创建账户
 func (s *accountService) CreateAccount(dto services.AccountCreatedDTO) (*services.AccountDTO, error) {
 	// 验证输入参数
-	err := base.Validate().Struct(dto)
+	err := base.ValidateStruct(dto)
 	if err != nil {
-		_, ok := err.(*validator.InvalidValidationError)
-		if ok {
-			logrus.Error("参数验证错误", err)
-		}
-		errs, ok := err.(validator.ValidationErrors)
-		if ok {
-			for _, err := range errs {
-				logrus.Error(err.Translate(base.Translate()))
-			}
-		}
 		return nil, err
 	}
 	// 执行账户创建的业务逻辑
@@ -61,18 +49,8 @@ func (s *accountService) CreateAccount(dto services.AccountCreatedDTO) (*service
 // Transfer 转账
 func (s *accountService) Transfer(dto services.AccountTransferDTO) (services.TransferStatus, error) {
 	// 验证输入参数
-	err := base.Validate().Struct(&dto)
+	err := base.ValidateStruct(dto)
 	if err != nil {
-		_, ok := err.(*validator.InvalidValidationError)
-		if ok {
-			logrus.Error("参数验证错误", err)
-		}
-		errs, ok := err.(validator.ValidationErrors)
-		if ok {
-			for _, err := range errs {
-				logrus.Error(err.Translate(base.Translate()))
-			}
-		}
 		return services.TransferStatusFailure, err
 	}
 	// 验证转账类型和 flag 是否一致

@@ -1,6 +1,7 @@
 package account
 
 import (
+	"context"
 	"errors"
 	"resk/infra/base"
 	"resk/services"
@@ -16,6 +17,10 @@ import (
 type accountDomain struct {
 	account    Account
 	accountLog AccountLog
+}
+
+func NewAccountDomain() *accountDomain {
+	return new(accountDomain)
 }
 
 // 创建logNo
@@ -92,9 +97,17 @@ func (domain *accountDomain) Create(dto services.AccountDTO) (*services.AccountD
 
 	return retDto, err
 }
+func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status services.TransferStatus, err error) {
+	err = base.Tx(func(runner *dbx.TxRunner) error {
+		ctx := base.WithValueContext(context.Background(), runner)
+		status, err = domain.TransferWithContext(ctx, dto)
+		return err
+	})
+	return status, err
+}
 
 // 转账/充值
-func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status services.TransferStatus, err error) {
+func (domain *accountDomain) TransferWithContext(ctx context.Context, dto services.AccountTransferDTO) (status services.TransferStatus, err error) {
 	// 修正 amount
 	amount := dto.Amount
 	if dto.ChangeFlag == services.FlagAccountOut {
@@ -106,7 +119,7 @@ func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status s
 	domain.createAccountLog()
 	// 检查余额是否足够和更新余额:通过乐观锁来验证,更新余额的同时验证余额是否足够你
 	// 写入流水记录
-	err = base.Tx(func(runner *dbx.TxRunner) error {
+	err = base.ExecuteContext(ctx, func(runner *dbx.TxRunner) error {
 		accountDao := AccountDao{runner: runner}
 		accountLogDao := AccountLogDao{runner: runner}
 		rows, err := accountDao.UpdateBalance(dto.TradeBody.AccountNo, amount)
