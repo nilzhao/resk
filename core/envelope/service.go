@@ -8,6 +8,7 @@ import (
 
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
 )
 
 var once sync.Once
@@ -29,7 +30,19 @@ func (r *redEnvelopeService) Get(envelopeNo string) (order *services.RedEnvelope
 
 // Receive implements services.RedEnvelopeService
 func (r *redEnvelopeService) Receive(dto services.RedEnvelopeReceiveDTO) (item *services.RedEnvelopeItemDTO, err error) {
-	panic("unimplemented")
+	// 参数校验
+	if err = base.ValidateStruct(&dto); err != nil {
+		return nil, err
+	}
+	// 获取当前收红包用户的账户信息
+	account := services.GetAccountService().GetAccountByUserId(dto.RecvUserId)
+	if account == nil {
+		return nil, errors.New("红包账户不存在: user_id=" + dto.RecvUserId)
+	}
+	// 尝试接收红包
+	domain := goodsDomain{}
+	item, err = domain.Receive(context.Background(), dto)
+	return item, err
 }
 
 // Refund implements services.RedEnvelopeService

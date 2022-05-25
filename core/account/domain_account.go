@@ -47,15 +47,13 @@ func (domain *accountDomain) createAccountLog() {
 	domain.accountLog.TargetAccountNo = domain.account.UserId
 	domain.accountLog.TargetUserId = domain.account.UserId
 	domain.accountLog.TargetUsername = domain.account.Username.String
-	if domain.accountLog.ChangeType == services.AccountCreated {
-		// 交易金额
-		domain.accountLog.Amount = domain.account.Balance
-		domain.accountLog.Balance = domain.account.Balance
-		// 交易变化属性
-		domain.accountLog.Decs = "账户创建"
-		domain.accountLog.ChangeType = services.AccountCreated
-		domain.accountLog.ChangeFlag = services.FlagAccountCreated
-	}
+	// 交易金额
+	domain.accountLog.Amount = domain.account.Balance
+	domain.accountLog.Balance = domain.account.Balance
+	// 交易变化属性
+	domain.accountLog.Decs = "账户创建"
+	domain.accountLog.ChangeType = services.AccountCreated
+	domain.accountLog.ChangeFlag = services.FlagAccountCreated
 }
 
 // 创建账户
@@ -97,6 +95,7 @@ func (domain *accountDomain) Create(dto services.AccountDTO) (*services.AccountD
 
 	return retDto, err
 }
+
 func (domain *accountDomain) Transfer(dto services.AccountTransferDTO) (status services.TransferStatus, err error) {
 	err = base.Tx(func(runner *dbx.TxRunner) error {
 		ctx := base.WithValueContext(context.Background(), runner)
@@ -116,7 +115,7 @@ func (domain *accountDomain) TransferWithContext(ctx context.Context, dto servic
 	// 创建账户流水记录
 	domain.accountLog = AccountLog{}
 	domain.accountLog.FromTransferDTO(&dto)
-	domain.createAccountLog()
+	domain.createAccountLogNo()
 	// 检查余额是否足够和更新余额:通过乐观锁来验证,更新余额的同时验证余额是否足够你
 	// 写入流水记录
 	err = base.ExecuteContext(ctx, func(runner *dbx.TxRunner) error {

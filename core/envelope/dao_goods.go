@@ -28,7 +28,7 @@ func (dao *RedEnvelopeGoodsDao) UpdateBalance(envelopeNo string, amount decimal.
 		UPDATE
 			red_envelope_goods
 		SET
-			remain_amount=remain_amount-CAST(? AS DECIMAL(30,6))
+			remain_amount=remain_amount-CAST(? AS DECIMAL(30,6)),
 			remain_quantity=remain_quantity-1
 		WHERE
 			envelope_no=?

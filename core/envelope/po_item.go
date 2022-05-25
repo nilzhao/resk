@@ -11,7 +11,7 @@ import (
 
 type RedEnvelopeItem struct {
 	Id           int64           `json:"id" db:"id,omitempty"`                // 自增ID
-	ItemNo       int64           `json:"itemNo" db:"item_no,uni"`             // 红包订单详情编号
+	ItemNo       string          `json:"itemNo" db:"item_no,uni"`             // 红包订单详情编号
 	EnvelopeNo   string          `json:"envelopeNo" db:"envelope_no"`         // 红包编号,红包唯一标识
 	RecvUsername sql.NullString  `json:"recvUsername" db:"recv_username"`     // 红包接收者用户名称
 	RecvUserId   string          `json:"recvUserId" db:"recv_user_id"`        // 红包接收者用户编号

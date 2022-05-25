@@ -51,8 +51,8 @@ func (d *goodsDomain) SendOut(goods services.RedEnvelopeGoodsDTO) (activity *ser
 		}
 		// 2. 从红包发送人的资金账户中扣减红包金额
 		status, err := accountDomain.TransferWithContext(ctx, transfer)
-		if status == services.TransferStatusSuccess {
-			return nil
+		if status != services.TransferStatusSuccess {
+			return err
 		}
 		// 3. 将扣减的红包总金额转入红包中间商的红包资金账户
 		transfer = services.AccountTransferDTO{

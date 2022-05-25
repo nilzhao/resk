@@ -1,6 +1,7 @@
 package envelope
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/tietang/dbx"
 )
 
@@ -9,7 +10,7 @@ type RedEnvelopeItemDao struct {
 }
 
 // 查询
-func (dao *RedEnvelopeItemDao) GetOne(itemNo int64) *RedEnvelopeItem {
+func (dao *RedEnvelopeItemDao) GetOne(itemNo string) *RedEnvelopeItem {
 	item := &RedEnvelopeItem{
 		ItemNo: itemNo,
 	}
@@ -27,4 +28,21 @@ func (dao *RedEnvelopeItemDao) Insert(item *RedEnvelopeItem) (int64, error) {
 		return 0, err
 	}
 	return ret.RowsAffected()
+}
+
+func (dao *RedEnvelopeItemDao) FindItems(envelopeNo string) (items []*RedEnvelopeItem) {
+	sql := `
+		SELECT
+			*
+		FROM
+			red_envelope_item
+		WHERE
+			envelope_no=?
+	`
+	err := dao.runner.Find(items, sql, envelopeNo)
+	if err != nil {
+		logrus.Error(err)
+		return nil
+	}
+	return items
 }
