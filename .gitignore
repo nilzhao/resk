@@ -2,3 +2,5 @@ logs/
 .idea/
 .vscode/
 example/
+
+__debug_bin
