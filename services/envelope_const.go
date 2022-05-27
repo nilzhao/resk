@@ -21,6 +21,11 @@ const (
 	Paying     PayStatus = 2
 	Payed      PayStatus = 3
 	PayFailure PayStatus = 4
+
+	RefundNothing PayStatus = 6
+	Refunding     PayStatus = 7
+	Refunded      PayStatus = 8
+	RefundFailure PayStatus = 9
 )
 
 // 红包订单状态: 创建 发布 过期 失效
@@ -31,6 +36,11 @@ const (
 	OrderActivated OrderStatus = 2
 	OrderExpired   OrderStatus = 3
 	OrderDisabled  OrderStatus = 4
+
+	// 退款成功
+	OrderExpiredSuccess OrderStatus = 5
+	// 退款失败
+	OrderExpiredFailed OrderStatus = 6
 )
 
 // 活动状态: 创建 激活 过期 失效
